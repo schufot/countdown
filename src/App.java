@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        // System.out.println(getDateDiff(LocalDate.of(2024, 1, 20)));
         getDateDiffWithUserInput();
     }
 
@@ -25,7 +26,8 @@ public class App {
         }
     }
 
-    public long getDateDiff(LocalDate date) {
+    public static long getDateDiff(LocalDate date) {
         return date.until(LocalDate.now(), ChronoUnit.DAYS);
     }
+
 }
