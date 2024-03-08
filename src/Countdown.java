@@ -1,3 +1,6 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,10 +9,31 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.Scanner;
 
-public class App {
-    public static void main(String[] args) throws Exception {
-        // System.out.println(getDateDiff(LocalDate.of(2024, 1, 20)));
-        getDateDiffWithUserInput();
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class Countdown {
+    public static void main(String[] args) {
+        new Countdown();
+
+    }
+
+    public Countdown() {
+        JFrame frame = new JFrame("Countdown");
+        JButton button = new JButton("Calculate Difference");
+        JLabel label = new JLabel("Days until");
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+        panel.setLayout(new GridLayout(0, 1));
+        panel.add(button);
+        frame.add(panel, BorderLayout.CENTER);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
     }
 
     public static void getDateDiffWithUserInput() {
