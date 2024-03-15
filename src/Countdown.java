@@ -2,9 +2,9 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +26,7 @@ public class Countdown {
         JPanel panel = new JPanel();
         JTextField startField = new JTextField();
         JTextField endField = new JTextField();
-        JLabel outputLabel = new JLabel("Diff");
+        JLabel outputLabel = new JLabel("Days left: ");
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         panel.setLayout(new GridLayout(0, 1));
         panel.add(startField);
@@ -57,17 +57,10 @@ public class Countdown {
     }
 
     public String getDiff(String start, String end) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
-        try {
-            Date date1 = (Date) dateFormat.parse(start);
-            Date date2 = (Date) dateFormat.parse(end);
-            long difference_In_Time = date2.getTime() - date1.getTime();
-            long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
-            return Long.toString(difference_In_Days);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+        LocalDate date1 = LocalDate.parse(start);
+        LocalDate date2 = LocalDate.parse(end);
+        return Long.toString(date1.until(date2, ChronoUnit.DAYS));
 
     }
 
