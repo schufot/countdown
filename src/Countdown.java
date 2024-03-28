@@ -1,3 +1,9 @@
+
+/**
+ * 
+ * author: schufot
+ */
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -12,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 public class Countdown {
     public static void main(String[] args) {
@@ -21,11 +28,10 @@ public class Countdown {
 
     public Countdown() {
         JFrame frame = new JFrame("Countdown");
-        JButton button = new JButton("Calculate Difference");
-        JLabel label = new JLabel("Days until");
+        JButton button = new JButton("Calculate difference");
         JPanel panel = new JPanel();
-        JTextField startField = new JTextField();
-        JTextField endField = new JTextField();
+        JTextField startField = new JTextField(15);
+        JTextField endField = new JTextField(15);
         JLabel outputLabel = new JLabel("Days left: ");
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         panel.setLayout(new GridLayout(0, 1));
@@ -34,7 +40,7 @@ public class Countdown {
         panel.add(button);
         panel.add(outputLabel);
         frame.add(panel, BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
 
@@ -42,7 +48,7 @@ public class Countdown {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (formatCheckValidate(startField.getText()) && formatCheckValidate(endField.getText())) {
-                    outputLabel.setText(getDiff(startField.getText(), endField.getText()));
+                    outputLabel.setText("Days left: " + getDiff(startField.getText(), endField.getText()));
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid format! Input must be in the format 'YYYY-MM-DD'",
                             null, JOptionPane.ERROR_MESSAGE);
