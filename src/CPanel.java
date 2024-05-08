@@ -1,6 +1,10 @@
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -11,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class CPanel extends JPanel {
+public class CPanel extends JPanel implements Serializable {
 
     private CFrame cFrame;
 
@@ -53,4 +57,5 @@ public class CPanel extends JPanel {
 
     }
 
+    
 }
