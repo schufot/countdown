@@ -59,7 +59,6 @@ public class CPanel extends JPanel implements Serializable {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // saveState(nameField.getText(), startField.getText(), endField.getText());
                 saveLabel.setText("Data saved: " + displaySavedState());
             }
 
