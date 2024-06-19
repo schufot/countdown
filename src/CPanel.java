@@ -18,13 +18,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 public class CPanel extends JPanel implements Serializable {
 
     private CFrame cFrame;
 
-    public CPanel(CFrame cFrame) {
+    public CPanel(CFrame cFrame) throws IOException {
         this.cFrame = cFrame;
         JButton button = new JButton("Calculate difference");
         JButton buttonSave = new JButton("Save");
@@ -33,6 +34,12 @@ public class CPanel extends JPanel implements Serializable {
         JTextField endField = new JTextField(15);
         JLabel outputLabel = new JLabel("Days left: ");
         JLabel saveLabel = new JLabel("Data saved: ");
+
+        // Table with saved countdowns
+        String[] columnNames = { "Name", "Days left" };
+        Object[][] data = { { getSavedName(), getSavedDaysLeft() } };
+        JTable savedDataTable = new JTable(data, columnNames);
+
         this.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         this.setLayout(new GridLayout(0, 1));
         this.add(nameField);
@@ -42,6 +49,8 @@ public class CPanel extends JPanel implements Serializable {
         this.add(outputLabel);
         this.add(buttonSave);
         this.add(saveLabel);
+        this.add(savedDataTable.getTableHeader());
+        this.add(savedDataTable);
 
         button.addActionListener(new ActionListener() {
             @Override
@@ -59,7 +68,12 @@ public class CPanel extends JPanel implements Serializable {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveLabel.setText("Data saved: " + displaySavedState());
+                saveState(nameField.getText(), startField.getText(), endField.getText());
+                try {
+                    saveLabel.setText("Data saved: " + getSavedName() + getSavedDaysLeft());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
 
         });
@@ -91,19 +105,24 @@ public class CPanel extends JPanel implements Serializable {
         }
     }
 
-    public String displaySavedState() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("output.txt"));
-            String name = reader.readLine();
-            String start = reader.readLine();
-            String end = reader.readLine();
-            String diff = reader.readLine();
-            reader.close();
-            return name + ": " + diff;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "Please try again";
+    public String getSavedName() throws IOException {
+
+        BufferedReader reader = new BufferedReader(new FileReader("output.txt"));
+        String name = reader.readLine();
+        reader.close();
+        return name;
+
+    }
+
+    public String getSavedDaysLeft() throws IOException {
+
+        BufferedReader reader = new BufferedReader(new FileReader("output.txt"));
+        String name = reader.readLine();
+        String start = reader.readLine();
+        String end = reader.readLine();
+        String diff = reader.readLine();
+        reader.close();
+        return diff;
 
     }
 
