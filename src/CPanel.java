@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class CPanel extends JPanel implements Serializable {
 
@@ -33,12 +34,12 @@ public class CPanel extends JPanel implements Serializable {
         JTextField startField = new JTextField(15);
         JTextField endField = new JTextField(15);
         JLabel outputLabel = new JLabel("Days left: ");
-        JLabel saveLabel = new JLabel("Data saved: ");
 
         // Table with saved countdowns
-        String[] columnNames = { "Name", "Days left" };
-        Object[][] data = { { getSavedName(), getSavedDaysLeft() } };
-        JTable savedDataTable = new JTable(data, columnNames);
+        DefaultTableModel modelTable = new DefaultTableModel();
+        modelTable.addColumn("Name");
+        modelTable.addColumn("Days left");
+        JTable savedDataTable = new JTable(modelTable);
 
         this.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         this.setLayout(new GridLayout(0, 1));
@@ -48,7 +49,6 @@ public class CPanel extends JPanel implements Serializable {
         this.add(button);
         this.add(outputLabel);
         this.add(buttonSave);
-        this.add(saveLabel);
         this.add(savedDataTable.getTableHeader());
         this.add(savedDataTable);
 
@@ -56,7 +56,8 @@ public class CPanel extends JPanel implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (formatCheckValidate(startField.getText()) && formatCheckValidate(endField.getText())) {
-                    outputLabel.setText("Days left: " + getDiff(startField.getText(), endField.getText()));
+                    Entry entry = new Entry(nameField.getText(), LocalDate.parse(startField.getText()), LocalDate.parse(endField.getText()));
+                    outputLabel.setText("Days left: " + entry.getDiff());
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid format! Input must be in the format 'YYYY-MM-DD'",
                             null, JOptionPane.ERROR_MESSAGE);
@@ -68,9 +69,9 @@ public class CPanel extends JPanel implements Serializable {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveState(nameField.getText(), startField.getText(), endField.getText());
+                DefaultTableModel model = (DefaultTableModel) savedDataTable.getModel();
                 try {
-                    saveLabel.setText("Data saved: " + getSavedName() + getSavedDaysLeft());
+                    model.addRow(new Object[] { getSavedName(), getSavedDaysLeft() });
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -82,14 +83,6 @@ public class CPanel extends JPanel implements Serializable {
 
     public boolean formatCheckValidate(String input) {
         return input.matches("\\d{4}-\\d{2}-\\d{2}");
-    }
-
-    public String getDiff(String start, String end) {
-
-        LocalDate date1 = LocalDate.parse(start);
-        LocalDate date2 = LocalDate.parse(end);
-        return Long.toString(date1.until(date2, ChronoUnit.DAYS));
-
     }
 
     public void saveState(String name, String start, String end) {
