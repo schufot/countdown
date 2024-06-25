@@ -3,15 +3,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -56,8 +54,10 @@ public class CPanel extends JPanel implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (formatCheckValidate(startField.getText()) && formatCheckValidate(endField.getText())) {
-                    Entry entry = new Entry(nameField.getText(), LocalDate.parse(startField.getText()), LocalDate.parse(endField.getText()));
+                    Entry entry = new Entry(nameField.getText(), LocalDate.parse(startField.getText()),
+                            LocalDate.parse(endField.getText()));
                     outputLabel.setText("Days left: " + entry.getDiff());
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid format! Input must be in the format 'YYYY-MM-DD'",
                             null, JOptionPane.ERROR_MESSAGE);
@@ -72,6 +72,7 @@ public class CPanel extends JPanel implements Serializable {
                 DefaultTableModel model = (DefaultTableModel) savedDataTable.getModel();
                 try {
                     model.addRow(new Object[] { getSavedName(), getSavedDaysLeft() });
+
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -83,19 +84,6 @@ public class CPanel extends JPanel implements Serializable {
 
     public boolean formatCheckValidate(String input) {
         return input.matches("\\d{4}-\\d{2}-\\d{2}");
-    }
-
-    public void saveState(String name, String start, String end) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"));
-            writer.write(name.toString() + "\n");
-            writer.write(start.toString() + "\n");
-            writer.write(end.toString() + "\n");
-            writer.write(getDiff(start, end).toString());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getSavedName() throws IOException {

@@ -1,7 +1,13 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class Entry {
+public class Entry implements Serializable {
 
     private String name;
     private LocalDate startD;
@@ -19,6 +25,23 @@ public class Entry {
 
         return (int) start.until(end, ChronoUnit.DAYS);
 
+    }
+
+    public void save() throws IOException{
+        FileOutputStream fileOut = new FileOutputStream("EntryInfo.ser");
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        out.writeObject(this);
+        out.close();
+        fileOut.close();
+    }
+
+    public void desave() throws IOException, ClassNotFoundException{
+        FileInputStream fileIn = new FileInputStream("//home//thea//Dokumente//GitHub//countdown//EntryInfo.ser");
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        in.readObject();
+        in.close();
+        fileIn.close();
+        
     }
 
     public String getName() {
